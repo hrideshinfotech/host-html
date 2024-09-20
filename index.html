@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF to Image Conversion</title>
-    <script src="https://unpkg.com/pdfjs-dist/build/pdf.min.js"></script>
-    <script src="https://unpkg.com/pdfjs-dist/build/pdf.worker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.worker.min.js"></script>
     <style>
         #pdfImage {
             border: 1px solid black;
@@ -22,7 +22,7 @@
     <script>
         const pdfUrl = 'https://mppsc.mp.gov.in/uploads/advertisement/Advt_State_Eligibility_Test_(SET)_2024_Dated_15_03_2024.pdf';
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist/build/pdf.worker.min.js';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.worker.min.js';
 
         pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc) {
             pdfDoc.getPage(1).then(function(page) {
