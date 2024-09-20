@@ -23,27 +23,32 @@
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.8.162/pdf.worker.min.js';
 
+        // PDF को लोड करना
         pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc) {
+            // पहले पेज को लोड करना
             pdfDoc.getPage(1).then(function(page) {
-                var scale = 1.5;
-                var viewport = page.getViewport({ scale: scale });
+                const scale = 2; // स्केल बढ़ाएं ताकि इमेज स्पष्ट हो
+                const viewport = page.getViewport({ scale: scale });
 
-                var canvas = document.getElementById('pdfCanvas');
-                var context = canvas.getContext('2d');
+                const canvas = document.getElementById('pdfCanvas');
+                const context = canvas.getContext('2d');
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
 
-                var renderContext = {
+                const renderContext = {
                     canvasContext: context,
                     viewport: viewport
                 };
 
+                // कैनवस पर पीडीएफ को रेंडर करें
                 page.render(renderContext).promise.then(function() {
-                    var img = document.getElementById('pdfImage');
-                    img.src = canvas.toDataURL();
-                    img.style.display = 'block';
+                    // कैनवस को इमेज में कन्वर्ट करें
+                    const img = document.getElementById('pdfImage');
+                    img.src = canvas.toDataURL('image/png'); // PNG फॉर्मेट में सेट करें
                 });
             });
+        }).catch(function(error) {
+            console.error("Error loading PDF: ", error);
         });
     </script>
 
