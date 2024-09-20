@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF to Image Conversion</title>
+    <title>PDF to Multiple Images</title>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.worker.min.js"></script>
     <style>
-        #pdfImage {
+        .pdfPageImage {
             border: 1px solid black;
+            margin-bottom: 20px;
             width: 100%;
             height: auto;
         }
     </style>
 </head>
 <body>
-    <h1>PDF to Image Example</h1>
-    <canvas id="pdfCanvas" style="display: none;"></canvas>
-    <img id="pdfImage" alt="PDF as Image">
+    <h1>mpset notification 2024</h1>
+    <div id="pdfImages"></div> <!-- सभी इमेज यहाँ दिखेंगी -->
 
     <script>
         const pdfUrl = 'https://mppsc.mp.gov.in/uploads/advertisement/Advt_State_Eligibility_Test_(SET)_2024_Dated_15_03_2024.pdf';
@@ -25,25 +25,33 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.worker.min.js';
 
         pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc) {
-            pdfDoc.getPage(1).then(function(page) {
-                const scale = 2.5; // स्केल बढ़ाएं
-                const viewport = page.getViewport({ scale: scale });
+            const totalPages = pdfDoc.numPages;  // PDF में कुल पेज
+            const pdfImagesContainer = document.getElementById('pdfImages'); // जहां सभी पेज दिखेंगे
 
-                const canvas = document.getElementById('pdfCanvas');
-                const context = canvas.getContext('2d');
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
+            // सभी पेजों को लूप में कन्वर्ट करें
+            for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
+                pdfDoc.getPage(pageNum).then(function(page) {
+                    const scale = 1.5; // पेज का स्केल
+                    const viewport = page.getViewport({ scale: scale });
 
-                const renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
 
-                page.render(renderContext).promise.then(function() {
-                    const img = document.getElementById('pdfImage');
-                    img.src = canvas.toDataURL('image/png');
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+
+                    page.render(renderContext).promise.then(function() {
+                        const img = document.createElement('img');
+                        img.src = canvas.toDataURL('image/png');
+                        img.classList.add('pdfPageImage');
+                        pdfImagesContainer.appendChild(img); // सभी इमेज को डिव में ऐड करें
+                    });
                 });
-            });
+            }
         }).catch(function(error) {
             console.error("Error loading PDF: ", error);
         });
