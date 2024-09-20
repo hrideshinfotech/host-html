@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF to Image Conversion</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.8.162/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.10.1/pdf.min.js"></script>
     <style>
         #pdfImage {
             border: 1px solid black;
@@ -15,17 +15,17 @@
 </head>
 <body>
     <h1>PDF to Image Example</h1>
-    <canvas id="pdfCanvas" style="display: none;"></canvas>
+    <canvas id="pdfCanvas" style="display: block;"></canvas>
     <img id="pdfImage" alt="PDF as Image">
 
     <script>
         const pdfUrl = 'https://mppsc.mp.gov.in/uploads/advertisement/Advt_State_Eligibility_Test_(SET)_2024_Dated_15_03_2024.pdf';
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.8.162/pdf.worker.min.js';
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.10.1/pdf.worker.min.js';
 
         pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc) {
             pdfDoc.getPage(1).then(function(page) {
-                const scale = 2; // स्केल बढ़ाएं
+                const scale = 2.5; // स्केल बढ़ाएं
                 const viewport = page.getViewport({ scale: scale });
 
                 const canvas = document.getElementById('pdfCanvas');
