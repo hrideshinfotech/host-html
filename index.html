@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF to Multiple Images Example</title>
+    <title>PDF to Image Converter</title>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.worker.min.js"></script>
     <style>
@@ -16,47 +16,57 @@
     </style>
 </head>
 <body>
-    <h1>New update PDF to Multiple Images Example</h1>
+    <h1>PDF to Image Converter</h1>
+    <input type="file" id="fileInput" accept=".pdf" />
     <div id="pdfImages"></div> <!-- This is where all images will be shown -->
 
     <script>
-        // Use the direct link to your uploaded PDF file in the GitHub Pages
-        const pdfUrl = 'https://hrideshinfotech.github.io/host-html/Advt_State_Eligibility_Test_(SET)_2024_Dated_15_03_2024.pdf';
-        
-        const pdfjsLib = window['pdfjs-dist/build/pdf'];
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.worker.min.js';
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type === 'application/pdf') {
+                const pdfUrl = URL.createObjectURL(file);
+                const pdfjsLib = window['pdfjs-dist/build/pdf'];
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.worker.min.js';
 
-        pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc) {
-            const totalPages = pdfDoc.numPages;  // Get total number of pages in the PDF
-            const pdfImagesContainer = document.getElementById('pdfImages'); // Where all images will be displayed
+                pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc) {
+                    const totalPages = pdfDoc.numPages;
+                    const pdfImagesContainer = document.getElementById('pdfImages');
 
-            // Loop through all pages and render them as images
-            for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-                pdfDoc.getPage(pageNum).then(function(page) {
-                    const scale = 1.5; // Scale factor for the page size
-                    const viewport = page.getViewport({ scale: scale });
+                    function renderPage(pageNum) {
+                        pdfDoc.getPage(pageNum).then(function(page) {
+                            const scale = 1.5;
+                            const viewport = page.getViewport({ scale: scale });
 
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
+                            const canvas = document.createElement('canvas');
+                            const context = canvas.getContext('2d');
+                            canvas.height = viewport.height;
+                            canvas.width = viewport.width;
 
-                    const renderContext = {
-                        canvasContext: context,
-                        viewport: viewport
-                    };
+                            const renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
 
-                    // Render the page to the canvas
-                    page.render(renderContext).promise.then(function() {
-                        const img = document.createElement('img');
-                        img.src = canvas.toDataURL('image/png');
-                        img.classList.add('pdfPageImage');
-                        pdfImagesContainer.appendChild(img); // Append the image to the container
-                    });
+                            page.render(renderContext).promise.then(function() {
+                                const img = document.createElement('img');
+                                img.src = canvas.toDataURL('image/png');
+                                img.classList.add('pdfPageImage');
+                                pdfImagesContainer.appendChild(img);
+
+                                if (pageNum < totalPages) {
+                                    renderPage(pageNum + 1);
+                                }
+                            });
+                        });
+                    }
+
+                    renderPage(1);
+                }).catch(function(error) {
+                    console.error("Error loading PDF: ", error);
                 });
+            } else {
+                alert('Please upload a valid PDF file.');
             }
-        }).catch(function(error) {
-            console.error("Error loading PDF: ", error);
         });
     </script>
 </body>
