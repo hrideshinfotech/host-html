@@ -1,60 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF to Multiple Images</title>
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.worker.min.js"></script>
-    <style>
-        .pdfPageImage {
-            border: 1px solid black;
-            margin-bottom: 20px;
-            width: 100%;
-            height: auto;
-        }
-    </style>
-</head>
-<body>
-    <h1>mpset notification 2024</h1>
-    <div id="pdfImages"></div> <!-- सभी इमेज यहाँ दिखेंगी -->
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
 
-    <script>
-        const pdfUrl = 'https://mppsc.mp.gov.in/uploads/advertisement/Advt_State_Eligibility_Test_(SET)_2024_Dated_15_03_2024.pdf';
-        const pdfjsLib = window['pdfjs-dist/build/pdf'];
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist/build/pdf.worker.min.js';
+header {
+    background: #007bff;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
 
-        pdfjsLib.getDocument(pdfUrl).promise.then(function(pdfDoc) {
-            const totalPages = pdfDoc.numPages;  // PDF में कुल पेज
-            const pdfImagesContainer = document.getElementById('pdfImages'); // जहां सभी पेज दिखेंगे
+nav ul {
+    list-style: none;
+    padding: 0;
+}
 
-            // सभी पेजों को लूप में कन्वर्ट करें
-            for (let pageNum = 1; pageNum <= totalPages; pageNum++) {
-                pdfDoc.getPage(pageNum).then(function(page) {
-                    const scale = 1.5; // पेज का स्केल
-                    const viewport = page.getViewport({ scale: scale });
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
 
-                    const canvas = document.createElement('canvas');
-                    const context = canvas.getContext('2d');
-                    canvas.height = viewport.height;
-                    canvas.width = viewport.width;
+nav a {
+    color: white;
+    text-decoration: none;
+}
 
-                    const renderContext = {
-                        canvasContext: context,
-                        viewport: viewport
-                    };
+#hero {
+    background: #f4f4f4;
+    padding: 20px;
+    text-align: center;
+}
 
-                    page.render(renderContext).promise.then(function() {
-                        const img = document.createElement('img');
-                        img.src = canvas.toDataURL('image/png');
-                        img.classList.add('pdfPageImage');
-                        pdfImagesContainer.appendChild(img); // सभी इमेज को डिव में ऐड करें
-                    });
-                });
-            }
-        }).catch(function(error) {
-            console.error("Error loading PDF: ", error);
-        });
-    </script>
-</body>
-</html>
+.btn {
+    background: #28a745;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+section {
+    padding: 20px;
+    margin: 20px 0;
+}
+
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background: #007bff;
+    color: white;
+}
