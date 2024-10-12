@@ -1,5 +1,6 @@
-<!doctype html>
-
+<!DOCTYPE html>
+<html>
+<head>
 <style>
 .table-container {
     display: table;
@@ -66,6 +67,8 @@
     margin-bottom: 2px;
 }
 </style>
+</head>
+<body>
 
 <div class="table-container">
     <div class="column" id="column1">
@@ -74,21 +77,22 @@
     <div class="column" id="column2">
         <div class="column-header">सरकारी योजना</div>
     </div>
-    <div class="column" id="column3">
-        <div class="column-header">बिजनेस आइडिया</div>
-    </div>
     <div class="column" id="column4">
         <div class="column-header">News</div>
     </div>
+    <div class="column" id="column3">
+        <div class="column-header">बिजनेस आइडिया</div>
+    </div>
+    <!-- Change the column header to "स्वास्थ्य" -->
     <div class="column" id="column5">
-        <div class="column-header">Care</div>
+        <div class="column-header">सुरक्षा</div>
     </div>
 </div>
 
 <!-- JavaScript Code -->
 <script type="text/javascript">
 function LoadTheArchive(TotalFeed) {
-    var keywordsToFilter = ["भर्ती", "किसान", "योजना", "Business", "बिजनेस", "news", "care"];
+    var keywordsToFilter = ["भर्ती", "किसान", "योजना", "Business", "बिजनेस", "news", "care", "सुरक्षा", "स्वास्थ्य", "जीवन", "जरूरी", "जानकारी", "सेहत"];
     var filteredPosts = [];
 
     if ("entry" in TotalFeed.feed) {
@@ -112,21 +116,19 @@ function LoadTheArchive(TotalFeed) {
         }
     }
 
-    // अलग-अलग कीवर्ड के लिए पोस्ट्स को फ़िल्टर करें
+    // Filter posts for each keyword separately
     var filteredBhartiPosts = filteredPosts.filter(post => post.title.includes("भर्ती"));
     var filteredYojanaPosts = filteredPosts.filter(post => post.title.includes("योजना"));
     var filteredNewsPosts = filteredPosts.filter(post => post.title.includes("news"));
-    var filteredVyaparPosts = filteredPosts.filter(post => post.title.includes("बिजनेस"));
-    var filteredBusinessPosts = filteredPosts.filter(post => post.title.includes("Business"));
-    var filteredCarePosts = filteredPosts.filter(post => post.title.includes("care"));
+    var filteredVyaparPosts = filteredPosts.filter(post => post.title.includes("बिजनेस") || post.title.includes("Business"));
+    var filteredHealthPosts = filteredPosts.filter(post => post.title.includes("रक्षा") || post.title.includes("सुरक्षा") || post.title.includes("स्वास्थ्य") || post.title.includes("जीवन") || post.title.includes("fitness") || post.title.includes("सेहत"));
 
-    // हर कॉलम के लिए पोस्ट्स को डिस्प्ले करें
+    // Display posts for each column
     DisplaytheTOC("column1", "सरकारी भर्ती", filteredBhartiPosts, "भर्ती");
     DisplaytheTOC("column2", "सरकारी योजना", filteredYojanaPosts, "योजना");
-    DisplaytheTOC("column4", "news - mamaji", filteredNewsPosts, "news");
+    DisplaytheTOC("column4", "news", filteredNewsPosts, "news");
     DisplaytheTOC("column3", "बिजनेस आइडिया", filteredVyaparPosts, "बिजनेस");
-    DisplaytheTOC("column3", "बिजनेस आइडिया", filteredBusinessPosts, "Business");
-    DisplaytheTOC("column5", "Care", filteredCarePosts, "care");
+    DisplaytheTOC("column5", "सुरक्षा", filteredHealthPosts, "रक्षा");
 }
 
 function DisplaytheTOC(containerId, columnHeader, posts, keyword) {
@@ -142,7 +144,6 @@ function DisplaytheTOC(containerId, columnHeader, posts, keyword) {
             var postLink = document.createElement("a");
             postLink.className = "post-title";
             postLink.href = post.url;
-            postLink.target = "_blank"; // Open link in a new window/tab
             postLink.innerText = post.title;
 
             postDiv.appendChild(postLink);
@@ -151,7 +152,12 @@ function DisplaytheTOC(containerId, columnHeader, posts, keyword) {
     }
 }
 </script>
+<script src="https://mamajinaukariadda.in/feeds/posts/summary?alt=json-in-script&amp;max-results=150&amp;start-index=1&amp;callback=LoadTheArchive" type="text/javascript"></script>
+
 <script src="https://e4you.in/feeds/posts/summary?alt=json-in-script&amp;max-results=150&amp;start-index=1&amp;callback=LoadTheArchive" type="text/javascript"></script>
-<script src="https://www.mamajinaukariadda.in/feeds/posts/summary?alt=json-in-script&amp;max-results=150&amp;start-index=1&amp;callback=LoadTheArchive" type="text/javascript"></script>
+<script src="https://bhopalsamachar.in/feeds/posts/summary?alt=json-in-script&amp;max-results=150&amp;start-index=1&amp;callback=LoadTheArchive" type="text/javascript"></script>
+
 <script src="https://news.e4you.in/feeds/posts/summary?alt=json-in-script&amp;max-results=150&amp;start-index=1&amp;callback=LoadTheArchive" type="text/javascript"></script>
-</!doctype>
+
+</body>
+</html>
