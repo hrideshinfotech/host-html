@@ -83,7 +83,6 @@
     <div class="column" id="column3">
         <div class="column-header">बिजनेस आइडिया</div>
     </div>
-    <!-- Change the column header to "स्वास्थ्य" -->
     <div class="column" id="column5">
         <div class="column-header">सुरक्षा</div>
     </div>
@@ -144,6 +143,7 @@ function DisplaytheTOC(containerId, columnHeader, posts, keyword) {
             var postLink = document.createElement("a");
             postLink.className = "post-title";
             postLink.href = post.url;
+            postLink.target = "_blank"; // Add target="_blank" to open links in new tab
             postLink.innerText = post.title;
 
             postDiv.appendChild(postLink);
