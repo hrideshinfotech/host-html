@@ -1,0 +1,154 @@
+<!doctype html>
+
+<style>
+.table-container {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    color: red;
+}
+
+.column {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+}
+
+.column .column-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    background-color: yellow;
+}
+
+.column table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.column table th,
+.column table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.column table th {
+    background-color: #333;
+    color: white;
+}
+
+.column table tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.column table tr:hover {
+    background-color: #ddd;
+}
+
+.post-item {
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid red;
+    background-color: white;
+}
+
+.post-title {
+    display: block;
+    font-size: 14px;
+    font-weight: none;
+    text-decoration: none;
+    color: blue;
+    margin-bottom: 2px;
+}
+</style>
+
+<div class="table-container">
+    <div class="column" id="column1">
+        <div class="column-header">सरकारी भर्ती</div>
+    </div>
+    <div class="column" id="column2">
+        <div class="column-header">सरकारी योजना</div>
+    </div>
+    <div class="column" id="column3">
+        <div class="column-header">बिजनेस आइडिया</div>
+    </div>
+    <div class="column" id="column4">
+        <div class="column-header">News</div>
+    </div>
+    <div class="column" id="column5">
+        <div class="column-header">Care</div>
+    </div>
+</div>
+
+<!-- JavaScript Code -->
+<script type="text/javascript">
+function LoadTheArchive(TotalFeed) {
+    var keywordsToFilter = ["भर्ती", "किसान", "योजना", "Business", "बिजनेस", "news", "care"];
+    var filteredPosts = [];
+
+    if ("entry" in TotalFeed.feed) {
+        var PostEntries = TotalFeed.feed.entry.length;
+
+        for (var PostNum = 0; PostNum < PostEntries; PostNum++) {
+            var ThisPost = TotalFeed.feed.entry[PostNum];
+            var postTitle = ThisPost.title.$t;
+            var ThisPostURL;
+
+            for (var LinkNum = 0; LinkNum < ThisPost.link.length; LinkNum++) {
+                if (ThisPost.link[LinkNum].rel == "alternate") {
+                    ThisPostURL = ThisPost.link[LinkNum].href;
+                    break;
+                }
+            }
+
+            if (keywordsToFilter.some(keyword => postTitle.includes(keyword))) {
+                filteredPosts.push({ title: postTitle, url: ThisPostURL });
+            }
+        }
+    }
+
+    // अलग-अलग कीवर्ड के लिए पोस्ट्स को फ़िल्टर करें
+    var filteredBhartiPosts = filteredPosts.filter(post => post.title.includes("भर्ती"));
+    var filteredYojanaPosts = filteredPosts.filter(post => post.title.includes("योजना"));
+    var filteredNewsPosts = filteredPosts.filter(post => post.title.includes("news"));
+    var filteredVyaparPosts = filteredPosts.filter(post => post.title.includes("बिजनेस"));
+    var filteredBusinessPosts = filteredPosts.filter(post => post.title.includes("Business"));
+    var filteredCarePosts = filteredPosts.filter(post => post.title.includes("care"));
+
+    // हर कॉलम के लिए पोस्ट्स को डिस्प्ले करें
+    DisplaytheTOC("column1", "सरकारी भर्ती", filteredBhartiPosts, "भर्ती");
+    DisplaytheTOC("column2", "सरकारी योजना", filteredYojanaPosts, "योजना");
+    DisplaytheTOC("column4", "news - mamaji", filteredNewsPosts, "news");
+    DisplaytheTOC("column3", "बिजनेस आइडिया", filteredVyaparPosts, "बिजनेस");
+    DisplaytheTOC("column3", "बिजनेस आइडिया", filteredBusinessPosts, "Business");
+    DisplaytheTOC("column5", "Care", filteredCarePosts, "care");
+}
+
+function DisplaytheTOC(containerId, columnHeader, posts, keyword) {
+    var postContainer = document.querySelector("#" + containerId);
+
+    for (var EntryNum = 0; EntryNum < posts.length; EntryNum++) {
+        var post = posts[EntryNum];
+
+        if (post.title.includes(keyword)) {
+            var postDiv = document.createElement("div");
+            postDiv.className = "post-item";
+
+            var postLink = document.createElement("a");
+            postLink.className = "post-title";
+            postLink.href = post.url;
+            postLink.target = "_blank"; // Open link in a new window/tab
+            postLink.innerText = post.title;
+
+            postDiv.appendChild(postLink);
+            postContainer.appendChild(postDiv);
+        }
+    }
+}
+</script>
+<script src="https://www.mamajinaukariadda.in/feeds/posts/summary?alt=json-in-script&amp;max-results=150&amp;start-index=1&amp;callback=LoadTheArchive" type="text/javascript"></script></!doctype>
