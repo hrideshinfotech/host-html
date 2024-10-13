@@ -99,7 +99,7 @@ function LoadTheArchive(TotalFeed) {
 
         for (var PostNum = 0; PostNum < PostEntries; PostNum++) {
             var ThisPost = TotalFeed.feed.entry[PostNum];
-            var postTitle = ThisPost.title.$t;
+            var postTitle = ThisPost.title.$t.toLowerCase(); // Convert title to lowercase
             var ThisPostURL;
 
             for (var LinkNum = 0; LinkNum < ThisPost.link.length; LinkNum++) {
@@ -109,18 +109,19 @@ function LoadTheArchive(TotalFeed) {
                 }
             }
 
-            if (keywordsToFilter.some(keyword => postTitle.includes(keyword))) {
-                filteredPosts.push({ title: postTitle, url: ThisPostURL });
+            // Check if the post title contains any keyword (all in lowercase)
+            if (keywordsToFilter.some(keyword => postTitle.includes(keyword.toLowerCase()))) {
+                filteredPosts.push({ title: ThisPost.title.$t, url: ThisPostURL }); // Keep the original title
             }
         }
     }
 
     // Filter posts for each keyword separately
-    var filteredBhartiPosts = filteredPosts.filter(post => post.title.includes("भर्ती"));
-    var filteredYojanaPosts = filteredPosts.filter(post => post.title.includes("योजना"));
-    var filteredNewsPosts = filteredPosts.filter(post => post.title.includes("news"));
-    var filteredVyaparPosts = filteredPosts.filter(post => post.title.includes("बिजनेस") || post.title.includes("Business"));
-    var filteredHealthPosts = filteredPosts.filter(post => post.title.includes("रक्षा") || post.title.includes("सुरक्षा") || post.title.includes("स्वास्थ्य") || post.title.includes("जीवन") || post.title.includes("fitness") || post.title.includes("सेहत"));
+    var filteredBhartiPosts = filteredPosts.filter(post => post.title.toLowerCase().includes("भर्ती"));
+    var filteredYojanaPosts = filteredPosts.filter(post => post.title.toLowerCase().includes("योजना"));
+    var filteredNewsPosts = filteredPosts.filter(post => post.title.toLowerCase().includes("news"));
+    var filteredVyaparPosts = filteredPosts.filter(post => post.title.toLowerCase().includes("बिजनेस") || post.title.toLowerCase().includes("business"));
+    var filteredHealthPosts = filteredPosts.filter(post => post.title.toLowerCase().includes("रक्षा") || post.title.toLowerCase().includes("सुरक्षा") || post.title.toLowerCase().includes("स्वास्थ्य") || post.title.toLowerCase().includes("जीवन") || post.title.toLowerCase().includes("fitness") || post.title.toLowerCase().includes("सेहत"));
 
     // Display posts for each column
     DisplaytheTOC("column1", "सरकारी भर्ती", filteredBhartiPosts, "भर्ती");
@@ -136,7 +137,7 @@ function DisplaytheTOC(containerId, columnHeader, posts, keyword) {
     for (var EntryNum = 0; EntryNum < posts.length; EntryNum++) {
         var post = posts[EntryNum];
 
-        if (post.title.includes(keyword)) {
+        if (post.title.toLowerCase().includes(keyword.toLowerCase())) { // Convert keyword to lowercase for comparison
             var postDiv = document.createElement("div");
             postDiv.className = "post-item";
 
@@ -152,6 +153,7 @@ function DisplaytheTOC(containerId, columnHeader, posts, keyword) {
     }
 }
 </script>
+
 <script src="https://mamajinaukariadda.in/feeds/posts/summary?alt=json-in-script&amp;max-results=150&amp;start-index=1&amp;callback=LoadTheArchive" type="text/javascript"></script>
 
 <script src="https://e4you.in/feeds/posts/summary?alt=json-in-script&amp;max-results=150&amp;start-index=1&amp;callback=LoadTheArchive" type="text/javascript"></script>
